@@ -1,0 +1,72 @@
+  Servlet的生命周期
+  1、被创建：执行init方法，只执行一次
+         Servlet什么时候被创建？
+                   默认情况下，第一次访问时，Servlet被创建
+                   可以配置执行Servlet的创建时机，通过配置web.xml中的<load-on-startup>标签的值及性能配置
+                   一般用于加载资源
+
+          Servlet的init方法只执行一次，说明一个Servlet在内存中只存在一个对象，Servlet是单例的
+                   多个用户同时访问，可能存在线程安全问题
+                   解决：尽量不要在Servlet中定义成员变量，即使定义了成员变量，也不要修改值
+
+  2、提供服务：执行service方法，执行多次
+          每次访问Servlet时，Service方法都会被调用一次
+
+  3、被销毁：执行destroy方法，只执行一次
+           Servlet被销毁时执行，服务器关闭时，Servlet被销毁，
+           只有服务器正常关闭时，才会执行destroy方法
+           是在Servlet被销毁前执行，一般用于释放资源
+
+
+  工作空间项目    和    tomcat部署的web项目(存在工作空间的out目录下)
+        tomcat真正访问的是 “tomcat部署的web项目”, 这个项目对应着“工作空间项目”的目录下的所有资源，也就是web路径下的所有资源
+        "tomcat部署的web项目"路径下的WEB-INF下的classes中的内容来源于，src下的Java文件，经过编译后，放到WEB-INF/classes
+
+        WEB-INF目录下的资源不能被浏览器直接访问
+
+  GenericServlet:将Servlet接口中其它的方法做了默认空实现，只将service()方法作为抽象
+        将来定义Servlet类时，可以继承GenericServlet，实现service()方法即可
+
+  HttpServlet：对http协议的一种封装，简化操作
+         1、定义继承HttpServlet
+         2、复写doGet/doPost方法
+
+  Servlet相关配置
+         1、urlpattern：Servlet访问路径，可以是一个数组
+                一个servlet可以定义多个访问路径
+         2、路径定义规则：
+                1、/xxx
+                2、/xxx/xxx:多层路径，目录结构
+                3、*.do
+
+  超文本传输协议：定义了 客户端 和 服务器 通信时 发送的数据格式
+  特点：
+        1、基于TCP/IP的高级协议
+        2、默认端口号：80
+        3、基于请求/响应模型：一次请求对应一次响应
+        4、无状态的：每次请求之间相互独立，不能交互数据
+
+  历史版本
+        1.0：每一次请求都会建立新的连接
+        1.1：复用连接
+
+  GET:
+        1、请求参数在请求行中，在url后
+        2、请求的url长度有限制
+        3、不太安全
+
+  POST:
+        1、请求参数在请求体中
+        2、请求的url长度没有限制
+        3、相对安全
+
+  常见的请求头：
+        User-Agent：浏览器告诉服务器，浏览器的版本信息
+                可以在服务器获取该头信息，解决浏览器的兼容性问题
+
+        Referer：告诉服务器，当前请求的来源
+             作用：
+                    1、防盗链
+                    2、统计工作
+
+
