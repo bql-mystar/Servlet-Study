@@ -69,4 +69,16 @@
                     1、防盗链
                     2、统计工作
 
-
+  request功能：
+        1、获取请求信息
+            1、获取请求行信息
+                获取请求方式：String getMethod()
+                获取虚拟目录：String getContextPath()
+                获取Servlet路径：String getServletPath()
+                获取get方式请求参数：String getQueryString()
+                获取请求的URI：String getRequestURI()  String getRequestURL()
+                获取协议及版本：String getProtocol()
+                获取客户机的ip地址：String getRemoteAddr()
+            2、获取请求头信息
+            3、获取请求体信息
+        2、其他功能
