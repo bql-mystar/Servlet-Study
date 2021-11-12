@@ -208,3 +208,25 @@
                             给服务器使用：不需要加虚拟目录
                                 转发路径
 
+     ServletContext对象：
+        代表整个web应用，可以和程序容器(服务器)来通信
+        获取方式：
+            1、通过request对象获取
+                request.getServletContext()
+            2、通过HttpServlet获取
+                this.getServletContext()
+        功能：
+            1、获取MIME类型
+                MIME类型：在互联网通信过程中定义的一种文件数据类型
+                    格式：大类型/小类型  text/html
+                获取：String getMimeType(String file)
+            2、域对象：共享数据
+                方法：
+                    1、void setAttribute(String name, Object obj)：存储数据
+                    2、Object getAttribute(String name)：通过键获取对象
+                    3、void removeAttribute(String name)：通过键移除键值对
+                ServletContext对象范围：所有用户、所有请求的数据
+            3、获取文件的真实(服务器)路径：
+                    String getRealPath(String path)
+
+
