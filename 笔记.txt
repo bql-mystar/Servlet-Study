@@ -275,5 +275,190 @@
                     1、cookie一般用于存储少量的不太敏感的数据
                     2、在不登陆的情况下，完成服务器对客户端的身份识别
 
+  Session：服务器端会话技术，在一次会话的多次请求间共享数据，将数据保存在服务器端的对象，HttpSession
+        获取Session对象：HttpSession session = request.getSession()
+        HttpSession对象：
+            Object getAttribute(String name)
+            void setAttribute(String name, Object value)
+            void removeAttribute(String name)
 
+        原理：
+            session的实现是依赖于cookie的
+
+        细节：
+            1、当客户端关闭后，服务器不关闭，两次获取Session是否为同一个
+                默认情况下不是
+                如果想解决这个问题：可以创建一个cookie对象，设置JSESSIONID的值为session对应的id，并设置失效时间即可
+            2、当客户端不关闭，服务器关闭后，两次获取Session是否为同一个
+                不是同一个，但是要确保数据不丢失
+                    session的钝化：
+                        在服务器正常关闭之前，将session对象序列化到硬盘上
+                    session的活化
+                        在服务器启动后，将session文件转化为内存中的session对象
+            3、session的默认失效时间？session什么时候被销毁？
+                1、服务器关闭
+                2、session对象调用invalidate()
+                3、session默认失效时间 30分钟
+                    可以在web.xml中进行配置
+
+        session的特点：
+            1、session用于存储一次会话的多次请求的数据，存在服务器端
+            2、可以存储任意类型、任意大小的数据
+
+  session与cookie的区别：
+        1、session存储与服务器端，cookie在客户端
+        2、session没有数据大小限制，cookie有
+        3、session数据安全，cookie相当于不安全
+
+  Jsp：Jsp本质上就是一个Servlet
+        1、服务器解析请求消息，找到对应的jsp资源(以index.jsp为例)
+        2、如果找到了，会将index.jsp转化为.java文件
+        3、编译.java文件，生成.class字节码文件
+        4、由字节码提供访问
+
+        Jsp脚本：Jsp声明Java代码的方式
+            1、<% 代码 %>：定义的Java代码，在service方法中。service可以定义什么，该脚本中就可以定义什么
+            2、<%! 代码 %>：定义的Java代码，在jsp转换后的Java类的成员位置。
+            3、<%= 代码 %>：定义的Java代码，会输出到页面上，输出语句可以定义什么，该脚本中就可以定义什么
+
+        Jsp内置对象：在jsp页面中不需要获取和创建，可以直接使用的对象
+            jsp一共有9个内置对象
+                request
+                response
+                out：JspWriter对象，字符输出流对象。可以将数据输出到页面上。和response.getWriter()类似
+                    response.getWriter()和out.write()的取区别：
+                        在tomcat服务器真正给客户端做出响应之前，会先找response缓冲区数据，再找out缓冲区数据
+                        response.getWriter()永远在out.write()之前
+                pageContext：域对象，用于当前页面共享数据，还可以获取其它八个内置对象
+                session
+                application：ServletContext对象，所有用户间共享数据
+                page：当前页面(Servlet)的对象 this
+                config：ServletConfig对象，Servlet的配置对象
+                exception：Throwable对象
+
+        指令：
+            作用：用于配置jsp页面，导入资源文件
+            格式：
+                <%@ 指令名称 属性名1=属性值1 属性名2=属性值2.... %>
+            分类：
+                1、page：用于配置jsp页面
+                contentType：
+                        1、设置响应体的mime类型以及字符集
+                        2、设置当前jsp页面的编码（只有高级的ide才能生效，如果使用低级工具，需要设置pageEncoding属性设置当前页面的字符集）
+                import：导包
+                errorPage：当前页面发生异常后，会跳转到指定的错误页面
+                isErrorPage：标识当前页面是否是错误页面
+                    true：是，可以使用内置对象exception
+                    false：否，默认值，不可以使用exception
+                2、include：页面包含的，导入页面的资源文件
+                3、taglib：导入资源
+
+        注释：
+            1、html注释    <!-- -->：只能注释html代码片段
+            2、jsp注释 <%-- --%>：可以注释所有
+
+
+  MVC开发模式
+        M：Model，模型  JavaBean
+            完成具体的业务操作：如：查询数据库，封装对象
+        V：View，视图   Jsp
+            展示数据
+        C：Controller，控制器    Servlet
+            获取用户的输入
+            调用模型
+            将数据交给视图进行展示
+
+
+        优缺点：
+            优点：
+                1、耦合性低，方便维护，可以利于分工协作
+                2、重用性高
+
+            缺点：
+                使得项目架构变得复杂，对开发人员要求高
+
+  EL表达式：
+        替换和简化jsp页面中Java代码的编写
+        语法：${表达式}
+        注意：jsp默认支持el表达式，如果要忽略el表达式
+                                   1、设置jsp中page指令中的isELIgnored="true"忽略当前jsp页面中所有的el表达式
+                                   2、\${表达式} 忽略当前el表达式
+        使用：
+            1、运算
+                运算符：
+                    1、算术运算符
+                    2、比较运算符
+                    3、逻辑运算符
+                    4、空运算符：empty
+                        功能：
+                        ${empty list} 用于判断字符串、集合、数组对象是否为null，并且长度是否为0
+                        ${not empty list} 用于判断字符串、集合、数组对象是否不为null，并且长度大于0
+
+            2、获取值
+                1、el表达式只能从域对象中获取值
+                2、语法：
+                    1、${域名称.键名}：从指定域中获取指定键的值
+                        域名称：
+                            1、pageScope --> pageContext
+                            2、requestScope --> request
+                            3、sessionScope --> session
+                            4、applicationScope --> application(ServletContext)
+
+                    2、${键名}：表示一次从最小的域中查找是否有该键对应的值，直到找到为止
+                    3、获取对象：List集合、Map集合的值
+
+
+        隐式对象：el表达式有11个隐式对象
+            pageContext：
+                1、获取jsp其它八个内置对象
+
+  JSTL标签：jsp标准标签库
+        是由apache组织提供的开源的免费的jsp标签
+
+        用于简化和替换jsp页面上的Java代码
+
+        使用步骤：
+            1、导入jstl相关jar包
+            2、引入标签库：taglib指令
+            3、使用标签
+
+        常用的jstl标签
+            if：相当于Java代码的if语句
+            choose：相当于Java代码的switch语句
+            foreach：相当于Java代码的for语句
+
+  三层架构：软件设计架构
+        1、界面层(表示层)：用户看得到的界面。用户可以通过界面上的组件和服务器进行交互，接收参数，封装数据。调用业务逻辑层完成处理，转发jsp页面完成显示
+        2、业务逻辑层：处理业务逻辑，组合DAO层的简单方法，形成复杂的功能(业务逻辑操作)
+        3、数据访问层(dao层)：操作数据存储文件，定义了对数据库最基本的CRUD操作
+
+
+   Filter：过滤器
+        web中的过滤器：当访问服务器的资源时，过滤器可以将请求拦截下来，完成一些特殊的功能
+        过滤器的作用：
+                一般用于完成通用的操作，如：登陆验证、统一编码处理、敏感字符过滤
+
+        步骤：
+            1、定义一个类，实现接口Filter
+            2、复写方法
+            3、配置拦截路径
+                1、web.xml
+                        <filter>
+                            <filter-name>demo01</filter-name>
+                            <filter-class>com.xie.filter.Filter02</filter-class>
+                        </filter>
+
+                        <filter-mapping>
+                            <filter-name>demo01</filter-name>
+                            <url-pattern>/*</url-pattern>
+                        </filter-mapping>
+                2、注解  @WebFilter 注解
+
+        过滤器执行流程：
+        过滤器生命周期方法：
+            服务器启动后，会创建Filter对象，然后调用init方法
+            每一次请求被拦截资源时，会执行doFilter方法
+            在服务器关闭后，Filter对象被销毁，如果服务器是正常关闭，则会执行destroy方法
+        过滤器配置详解：
+        过滤器链(配置多个过滤器)：
 

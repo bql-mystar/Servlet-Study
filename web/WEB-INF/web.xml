@@ -20,4 +20,14 @@
         <servlet-name>demo01</servlet-name>
         <url-pattern>/demo01</url-pattern>
     </servlet-mapping>
+
+    <filter>
+        <filter-name>demo01</filter-name>
+        <filter-class>com.xie.filter.Filter02</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>demo01</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>
