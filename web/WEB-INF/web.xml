@@ -29,5 +29,10 @@
     <filter-mapping>
         <filter-name>demo01</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>  <!-- 在filter-mapping中配置这行即可 -->
     </filter-mapping>
+    
+<!--    <listener>-->
+<!--        <listener-class>com.xie.listener.ServletContextListener01</listener-class>-->
+<!--    </listener>-->
 </web-app>
