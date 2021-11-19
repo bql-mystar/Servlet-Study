@@ -537,4 +537,14 @@
                         @WebListener
 
 
+   JSON数据和Java对象的相互转换
+        JSON解析器：
+            常间的解析器：Jsonlib，Gson，fastjson，jackson
 
+        JSON -> Java
+
+        Java -> JSON
+            1、使用步骤：
+                1、导入Jackson的jar包
+                2、创建Jackson核心对象：ObjectMapper
+                3、调用ObjectMapper的相关方法进行转换
