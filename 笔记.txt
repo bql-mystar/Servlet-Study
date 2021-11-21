@@ -565,3 +565,8 @@
             2、注解：
                 1、@JsonIgnore：排除属性
                 2、@JsonFormat：属性值的格式化
+
+   Jeids连接池：JedisPool
+        使用：
+            1、创建JedisPool连接池对象
+            2、调用方法getResource()方法获取Jedis连接
